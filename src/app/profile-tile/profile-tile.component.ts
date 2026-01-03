@@ -1,14 +1,24 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile-tile',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   template: `
     <div class="profile-card fade-in">
       <div class="photo-container">
-        <!-- Placeholder with glowing effect -->
-        <div class="photo-placeholder">
+        <!-- Photo with Fallback -->
+        <img 
+          *ngIf="showImage" 
+          [src]="imagePath" 
+          (error)="onImageError()" 
+          alt="Dipankar Medhi" 
+          class="photo"
+        />
+        
+        <!-- Placeholder (shows if image fails) -->
+        <div *ngIf="!showImage" class="photo-placeholder">
           <span>DM</span>
         </div>
       </div>
@@ -147,8 +157,21 @@ import { Component } from '@angular/core';
       border-color: #000;
       color: var(--neon-green);
     }
+    .photo {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--neon-green);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
   `
 })
 export class ProfileTileComponent {
+  imagePath = 'assets/profile.jpg';
+  showImage = true;
 
+  onImageError() {
+    this.showImage = false;
+  }
 }

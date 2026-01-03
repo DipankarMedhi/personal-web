@@ -8,24 +8,36 @@ import { DailyByte, NewsService } from '../services/news.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="daily-bytes-container">
+    <div class="daily-bytes-container fade-in">
       
-      <!-- State 1: No API Key -->
-      <div *ngIf="!hasKey" class="key-input-section">
+      <!-- Header with Settings Toggle -->
+      <div class="header-row">
+        <div>
+           <h1>Daily New Bytes</h1>
+           <span *ngIf="dailyByte" class="date">{{dailyByte.date | date:'fullDate'}}</span>
+        </div>
+        <button class="settings-btn" (click)="toggleSettings()" title="Configure Agent">
+          ⚙️
+        </button>
+      </div>
+
+      <!-- Settings / Key Input Section (Hidden by default) -->
+      <div *ngIf="showSettings" class="settings-panel">
         <div class="agent-card">
           <div class="icon">🤖</div>
-          <h2>Activate Daily News Agent</h2>
-          <p>Enter your free Guardian API Key to enable the AI agent.</p>
+          <h2>Configure News Agent</h2>
+          <p>Enter your Guardian API Key to enable live AI news cursing.</p>
           <div class="input-group">
             <input [(ngModel)]="apiKeyInput" placeholder="Paste API Key here..." />
-            <button (click)="saveKey()" [disabled]="!apiKeyInput">Initialize Agent</button>
+            <button (click)="saveKey()" [disabled]="!apiKeyInput">Save Key</button>
           </div>
-          <p class="hint">Don't have one? <a href="https://open-platform.theguardian.com/access/" target="_blank">Get a free key</a></p>
+          <p class="hint">Currently running: <strong>{{ hasKey ? 'Live Mode' : 'Demo Mode' }}</strong></p>
+          <p class="hint small"><a href="https://open-platform.theguardian.com/access/" target="_blank">Get a free key</a></p>
         </div>
       </div>
 
-      <!-- State 2: Loading / Agent Working -->
-      <div *ngIf="hasKey && isLoading" class="loading-section">
+      <!-- State: Loading / Agent Working -->
+      <div *ngIf="isLoading" class="loading-section">
         <div class="terminal">
           <div class="terminal-header">
             <span class="dot red"></span>
@@ -42,13 +54,9 @@ import { DailyByte, NewsService } from '../services/news.service';
         </div>
       </div>
 
-      <!-- State 3: Content Display -->
+      <!-- State: Content Display -->
       <div *ngIf="dailyByte && !isLoading" class="content-section">
-        <div class="header-row">
-          <h1>Daily New Bytes</h1>
-          <span class="date">{{dailyByte.date | date:'fullDate'}}</span>
-        </div>
-
+        
         <div class="news-grid">
           <!-- Main Story Card -->
           <a [href]="dailyByte.mainStory.url" target="_blank" class="news-card main">
@@ -72,6 +80,10 @@ import { DailyByte, NewsService } from '../services/news.service';
             </div>
           </a>
         </div>
+        
+        <div *ngIf="!hasKey" class="demo-banner">
+          Running in Demo Mode. Add an API key to get live daily updates.
+        </div>
       </div>
 
     </div>
@@ -83,16 +95,51 @@ import { DailyByte, NewsService } from '../services/news.service';
       color: #fff;
     }
 
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 1rem;
+    }
+    
+    h1 { margin: 0; font-size: 2.5rem; }
+    .date { color: var(--neon-green); font-weight: bold; font-size: 1rem; }
+
+    .settings-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+    
+    .settings-btn:hover { background: rgba(255,255,255,0.2); transform: rotate(90deg); }
+
+    .settings-panel {
+      margin-bottom: 2rem;
+      animation: slideDown 0.3s ease-out;
+    }
+    
+    @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
     /* Key Input Section */
     .agent-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid var(--neon-green);
       border-radius: 20px;
-      padding: 3rem;
+      padding: 2rem;
       text-align: center;
-      backdrop-filter: blur(10px);
       max-width: 500px;
-      margin: 4rem auto;
+      margin: 0 auto;
+      box-shadow: 0 0 30px rgba(204, 255, 0, 0.1);
     }
 
     .icon { font-size: 3rem; margin-bottom: 1rem; }
@@ -100,15 +147,15 @@ import { DailyByte, NewsService } from '../services/news.service';
     .input-group {
       display: flex;
       gap: 10px;
-      margin: 2rem 0;
+      margin: 1.5rem 0;
     }
 
     input {
       flex: 1;
-      padding: 10px 15px;
+      padding: 12px 15px;
       border-radius: 8px;
-      border: none;
-      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid #333;
+      background: #000;
       color: #fff;
     }
 
@@ -124,6 +171,8 @@ import { DailyByte, NewsService } from '../services/news.service';
     
     button:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    .hint { color: #888; margin-top: 1rem; }
+    .hint.small { font-size: 0.8rem; }
     .hint a { color: var(--neon-green); }
 
     /* Terminal Loading */
@@ -165,17 +214,6 @@ import { DailyByte, NewsService } from '../services/news.service';
     @keyframes blink { 50% { opacity: 0; } }
 
     /* News Grid */
-    .header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 2rem;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 1rem;
-    }
-    
-    .date { color: var(--neon-green); font-weight: bold; }
-
     .news-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -187,7 +225,7 @@ import { DailyByte, NewsService } from '../services/news.service';
     }
 
     .news-card {
-      background: rgba(255,255,255,0.03);
+      background: var(--card-light-bg);
       border-radius: 16px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.05);
@@ -195,11 +233,12 @@ import { DailyByte, NewsService } from '../services/news.service';
       display: flex;
       flex-direction: column;
       height: 100%;
+      text-decoration: none;
     }
 
     .news-card:hover {
       transform: translateY(-5px);
-      background: rgba(255,255,255,0.07);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
     .card-image {
@@ -207,6 +246,7 @@ import { DailyByte, NewsService } from '../services/news.service';
       background-size: cover;
       background-position: center;
       position: relative;
+      background-color: #333;
     }
 
     .category-tag {
@@ -225,8 +265,18 @@ import { DailyByte, NewsService } from '../services/news.service';
 
     .card-content { padding: 1.5rem; }
     
-    h2 { margin: 0 0 1rem 0; font-size: 1.4rem; color: #fff; line-height: 1.3; }
-    p { color: #aaa; margin: 0; line-height: 1.6; font-size: 0.95rem; }
+    h2 { margin: 0 0 1rem 0; font-size: 1.4rem; color: var(--text-on-light); line-height: 1.3; }
+    p { color: var(--text-secondary-on-light); margin: 0; line-height: 1.6; font-size: 0.95rem; }
+    
+    .demo-banner {
+      margin-top: 2rem;
+      text-align: center;
+      padding: 1rem;
+      background: rgba(204, 255, 0, 0.1);
+      color: var(--neon-green);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
   `]
 })
 export class DailyBytesComponent implements OnInit {
@@ -236,23 +286,28 @@ export class DailyBytesComponent implements OnInit {
   dailyByte: DailyByte | null = null;
   agentLogs: { time: string, message: string }[] = [];
 
+  showSettings = false;
+
   constructor(private newsService: NewsService) { }
 
   ngOnInit() {
     this.checkKey();
+    this.loadNews(); // Always load, will fallback to demo
   }
 
   checkKey() {
     this.hasKey = this.newsService.hasApiKey();
-    if (this.hasKey) {
-      this.loadNews();
-    }
+  }
+
+  toggleSettings() {
+    this.showSettings = !this.showSettings;
   }
 
   saveKey() {
     if (this.apiKeyInput.trim()) {
       this.newsService.saveApiKey(this.apiKeyInput.trim());
       this.hasKey = true;
+      this.showSettings = false; // Hide settings after save
       this.loadNews();
     }
   }

@@ -31,20 +31,46 @@ export class NewsService {
             const data = JSON.parse(cached) as DailyByte;
             if (data.date === today) {
                 console.log('Returning cached news for today.');
-                return data; // Return cached data if it's from today
+                return data;
             }
         }
 
-        return await this.fetchAndCurateNews(today);
+        // Try to fetch real news first
+        const realNews = await this.fetchAndCurateNews(today);
+        if (realNews) return realNews;
+
+        // Fallback to Demo News if no API key or fetch failed
+        console.log('Falling back to Demo News');
+        return this.getDemoNews(today);
+    }
+
+    private getDemoNews(date: string): DailyByte {
+        return {
+            date: date,
+            mainStory: {
+                title: "AI Agent Builds Personal Website in Record Time",
+                url: "https://www.deepmind.com/about",
+                category: "Tech Demo",
+                thumbnail: "assets/ai-tech.jpg", // Ensure this asset exists or handle missing
+                summary: "In a stunning demonstration of human-AI collaboration, a developer and an AI agent built a glassmorphism-styled portfolio site in under an hour. The site features dynamic cached news and a premium aesthetic."
+            },
+            sportsHighlight: {
+                title: "Grand Slam: Tennis Season Heats Up",
+                url: "https://www.atptour.com",
+                category: "Tennis",
+                thumbnail: "assets/tennis.jpg",
+                summary: "As the new season approaches, all eyes are on the upcoming majors. Analysts predict a shift in the rankings as the next generation of players steps up to challenge the legends."
+            }
+        };
     }
 
     private async fetchAndCurateNews(date: string): Promise<DailyByte | null> {
         const apiKey = localStorage.getItem(this.API_KEY_STORAGE);
-        if (!apiKey) return null; // No key, can't fetch
+        if (!apiKey) return null;
 
         try {
             // Fetch Main News (World/Technology)
-            const mainNews = await this.fetchFromGuardian(apiKey, 'world');
+            const mainNews = await this.fetchFromGuardian(apiKey, 'technology'); // Changed to technology for more relevance
 
             // Fetch Sports News
             const sportsNews = await this.fetchFromGuardian(apiKey, 'sport');
@@ -62,7 +88,7 @@ export class NewsService {
 
         } catch (error) {
             console.error('Error fetching news:', error);
-            return null; // Handle error gracefully
+            return null;
         }
     }
 
@@ -78,7 +104,7 @@ export class NewsService {
                 return {
                     title: result.webTitle,
                     url: result.webUrl,
-                    category: section === 'sport' ? 'Sports Highlight' : 'Main Story',
+                    category: section === 'sport' ? 'Sports Highlight' : 'Tech & World',
                     thumbnail: result.fields?.thumbnail,
                     summary: result.fields?.trailText
                 };
@@ -92,6 +118,8 @@ export class NewsService {
 
     saveApiKey(key: string) {
         localStorage.setItem(this.API_KEY_STORAGE, key);
+        // Clear cache to force refresh with new key
+        localStorage.removeItem(this.STORAGE_KEY);
     }
 
     hasApiKey(): boolean {
