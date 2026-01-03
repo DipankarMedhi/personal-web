@@ -1,19 +1,32 @@
 :root {
   --neon-green: #ccff00;
-  --dark-bg: #121212;
-  --card-bg: rgba(255, 255, 255, 0.95);
-  --text-primary: #333;
-  --text-secondary: #555;
-  --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --neon-glow: 0 0 10px rgba(204, 255, 0, 0.5);
+  --dark-bg: #0a0a0a;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-highlight: rgba(255, 255, 255, 0.1);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --card-radius: 24px;
+
+  /* Light Card Theme */
+  --card-light-bg: rgba(255, 255, 255, 0.9);
+  --text-on-light: #1a1a1a;
+  --text-secondary-on-light: #4a4a4a;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--neon-green);
+  background-color: var(--dark-bg);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(204, 255, 0, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(204, 255, 0, 0.05) 0%, transparent 20%);
   font-family: var(--font-main);
   color: var(--text-primary);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 * {
@@ -23,9 +36,36 @@ body {
 a {
   text-decoration: none;
   color: inherit;
-  transition: opacity 0.3s;
+  transition: all 0.3s ease;
 }
 
-a:hover {
-  opacity: 0.7;
+/* Global Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }

@@ -5,21 +5,25 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   template: `
-    <div class="profile-card">
+    <div class="profile-card fade-in">
       <div class="photo-container">
-        <!-- Placeholder for actual photo -->
-        <div class="photo-placeholder">DM</div>
-        <!-- <img src="assets/profile.jpg" alt="Dipankar Medhi" class="photo" /> -->
+        <!-- Placeholder with glowing effect -->
+        <div class="photo-placeholder">
+          <span>DM</span>
+        </div>
       </div>
+      
       <div class="info">
         <h1>Dipankar Medhi</h1>
-        <p class="headline">Software Engineer | Tennis Player | Coding Enthusiast</p>
+        <div class="role-pill">Software Engineer</div>
+        <p class="headline">Building things for the web | Tennis Player | Coding Enthusiast</p>
+        
         <div class="actions">
-          <a href="https://www.linkedin.com/in/dipankar-medhi" target="_blank" class="linkedin-btn">
-            View LinkedIn
+          <a href="https://www.linkedin.com/in/dipankar-medhi" target="_blank" class="btn primary">
+            <span class="icon">in</span> LinkedIn
           </a>
-          <a href="Dipankar_Resume.pdf" download="Dipankar_Medhi_Resume.pdf" class="resume-btn">
-            Download Resume
+          <a href="Dipankar_Resume.pdf" download="Dipankar_Medhi_Resume.pdf" class="btn secondary">
+            Resume
           </a>
         </div>
       </div>
@@ -27,94 +31,121 @@ import { Component } from '@angular/core';
   `,
   styles: `
     .profile-card {
-      background: var(--card-bg);
-      padding: 2rem;
-      border-radius: 20px;
+      background: var(--card-light-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 3rem;
+      border-radius: var(--card-radius);
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      transition: transform 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .profile-card::before {
+      display: none;
     }
     
     .profile-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
     }
 
     .photo-container {
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      position: relative;
     }
 
     .photo-placeholder {
-      width: 120px;
-      height: 120px;
+      width: 140px;
+      height: 140px;
       border-radius: 50%;
-      background: #333;
-      color: var(--neon-green);
+      background: #1a1a1a;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin: 0 auto;
-      border: 4px solid #fff;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--neon-green);
+      border: 2px solid var(--neon-green);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 2;
     }
 
-    .photo {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin: 0 auto;
-      border: 4px solid #fff;
+    .role-pill {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: #f0f0f0;
+      color: #000;
+      border-radius: 100px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
     }
 
     h1 {
       margin: 0 0 0.5rem 0;
-      font-size: 1.8rem;
-      color: #000;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text-on-light);
+      background: none;
+      -webkit-text-fill-color: initial;
+      letter-spacing: -1px;
     }
 
     .headline {
-      margin: 0 0 1.5rem 0;
-      color: var(--text-secondary);
+      margin: 0 0 2rem 0;
+      color: var(--text-secondary-on-light);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      max-width: 400px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      border-radius: 100px;
+      font-weight: 600;
+      cursor: pointer;
       font-size: 1rem;
-      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .info a {
-      margin: 0.5rem;
+    .btn.primary {
+      background: var(--neon-green);
+      color: #000;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
 
-    .linkedin-btn {
-      display: inline-block;
-      padding: 0.8rem 1.5rem;
-      background: #0077b5;
-      color: white;
-      border-radius: 50px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+    .btn.primary:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transform: scale(1.05);
     }
 
-    .resume-btn {
-      display: inline-block;
-      padding: 0.8rem 1.5rem;
+    .btn.secondary {
       background: #333;
-      color: var(--neon-green);
-      border-radius: 50px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      border: 2px solid #333;
-      transition: all 0.3s ease;
+      color: #fff;
+      border: 1px solid #333;
     }
-    
-    .resume-btn:hover {
-      background: transparent;
-      color: #333;
+
+    .btn.secondary:hover {
+      background: #000;
+      border-color: #000;
+      color: var(--neon-green);
     }
   `
 })
