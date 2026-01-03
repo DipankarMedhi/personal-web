@@ -1,0 +1,42 @@
+/* Main container to hold header, content, footer */
+.main-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Grid layout for tiles */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Responsive grid: 2 columns on larger screens */
+@media (min-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr 1fr;
+        align-items: stretch;
+    }
+}
+
+.tile {
+    height: 100%;
+}
+
+.footer-section {
+    margin-top: auto;
+}
