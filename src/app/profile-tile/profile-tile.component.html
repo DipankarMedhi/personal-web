@@ -1,0 +1,28 @@
+<div class="profile-card fade-in">
+    <div class="photo-container">
+        <!-- Photo with Fallback -->
+        @if (showImage()) {
+        <img [src]="imagePath()" (error)="onImageError()" alt="Dipankar Medhi" class="photo" />
+        } @else {
+        <!-- Placeholder (shows if image fails) -->
+        <div class="photo-placeholder">
+            <span>DM</span>
+        </div>
+        }
+    </div>
+
+    <div class="info">
+        <h1>Dipankar Medhi</h1>
+        <div class="role-pill">Software Engineer</div>
+        <p class="headline">Building things for the web | Tennis Player | Coding Enthusiast</p>
+
+        <div class="actions">
+            <a href="https://www.linkedin.com/in/dipankar-medhi" target="_blank" class="btn primary">
+                <span class="icon">in</span> LinkedIn
+            </a>
+            <a href="Dipankar_Resume.pdf" download="Dipankar_Medhi_Resume.pdf" class="btn secondary">
+                Resume
+            </a>
+        </div>
+    </div>
+</div>

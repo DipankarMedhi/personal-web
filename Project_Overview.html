@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Overview & Structure</title>
+    <style>
+        body {
+            font-family: 'Calibri', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        h3 { color: #7f8c8d; }
+        ul { margin-bottom: 20px; }
+        li { margin-bottom: 8px; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: Consolas, monospace; }
+        .section-divider { margin: 40px 0; border-top: 2px solid #eee; }
+        a { color: #3498db; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <h1>Project Overview & Structure</h1>
+    <p>This project is a modern, responsive personal portfolio website built with <strong>Angular 19</strong>. It features a clean, glassmorphism-inspired UI with a dedicated section for daily news highlights.</p>
+
+    <h2>🏗️ How it was built</h2>
+    <ul>
+        <li><strong>Framework</strong>: <a href="https://angular.dev/">Angular 19</a> (Standalone Components)</li>
+        <li><strong>Language</strong>: <a href="https://www.typescriptlang.org/">TypeScript</a></li>
+        <li><strong>Styling</strong>: Vanilla CSS with modern features like CSS Variables, Grid, and Flexbox.</li>
+        <li><strong>Deployment</strong>: Configured for GitHub Pages via <code>angular-cli-ghpages</code>.</li>
+    </ul>
+
+    <div class="section-divider"></div>
+
+    <h2>📂 Project Structure</h2>
+
+    <h3>Root Directory</h3>
+    <ul>
+        <li><code>angular.json</code>: Configuration for the Angular CLI (build, test, and serve settings).</li>
+        <li><code>package.json</code>: Project dependencies and scripts (e.g., <code>npm start</code>, <code>npm run build</code>).</li>
+        <li><code>src/</code>: The main source code folder.
+            <ul>
+                <li><code>styles.css</code>: Global styles and design tokens (colors, variables).</li>
+                <li><code>app/</code>: Contains all application logic and components.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <div class="section-divider"></div>
+
+    <h2>🧩 Component Breakdown</h2>
+
+    <h3>Core Layout</h3>
+    <ul>
+        <li><strong>AppComponent</strong>: The root container that holds the Header, Footer, and the main Content area (driven by the router).</li>
+        <li><strong>HeaderComponent</strong>: Sticky navigation bar with "Home" and "Daily New Bytes" links.</li>
+        <li><strong>FooterComponent</strong>: Social connection links (LinkedIn, Facebook).</li>
+    </ul>
+
+    <h3>Home Page Components</h3>
+    <p>The Home page uses a responsive grid layout to organize these cards:</p>
+    <ul>
+        <li><strong>HomeComponent</strong>: Orchestrates the grid layout for the tiles.</li>
+        <li><strong>ProfileTileComponent</strong>: 
+            <ul>
+                <li>Displays your name, role, and profile photo.</li>
+                <li>Includes a fallback mechanism if the profile photo fails to load.</li>
+                <li>Quick action buttons for LinkedIn and Resume download.</li>
+            </ul>
+        </li>
+        <li><strong>AboutTileComponent</strong>: 
+            <ul>
+                <li>A dedicated card for your biography and current interests (Tennis, Coding, etc.).</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h3>Features</h3>
+    <ul>
+        <li><strong>DailyBytesComponent</strong>: 
+            <ul>
+                <li>A unique "News Briefcase" feature.</li>
+                <li>Uses a terminal-style animation to simulate an agent gathering news.</li>
+                <li>Fetches live data from The Guardian API (if a key is provided).</li>
+            </ul>
+        </li>
+        <li><strong>NewsService</strong>: Handles the logic for API communication and local storage for the API key.</li>
+    </ul>
+
+    <div class="section-divider"></div>
+
+    <h2>🚀 Key Features</h2>
+    <ol>
+        <li><strong>Glassmorphism UI</strong>: Uses translucent backgrounds and blurs for a premium look.</li>
+        <li><strong>Responsive Grid</strong>: Automatically switches from 1 to 2 columns based on screen size.</li>
+        <li><strong>Animated Transitions</strong>: Smooth fade-in and hover effects on cards.</li>
+        <li><strong>Standalone Architecture</strong>: Modern Angular pattern that eliminates the need for <code>NgModules</code>.</li>
+    </ol>
+
+</body>
+</html>

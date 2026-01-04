@@ -5,82 +5,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   selector: 'app-header',
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
-  template: `
-    <nav class="navbar">
-      <div class="logo">
-        <a routerLink="/">DM</a>
-      </div>
-      <div class="nav-links">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        <a routerLink="/daily-bytes" routerLinkActive="active">Daily New Bytes</a>
-      </div>
-    </nav>
-  `,
-  styles: [`
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 5%;
-      background: rgba(10, 10, 10, 0.8);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .logo a {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #fff;
-      text-decoration: none;
-      letter-spacing: -1px;
-      position: relative;
-    }
-    
-    .logo a::after {
-      content: '.';
-      color: var(--neon-green);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 3rem;
-    }
-
-    .nav-links a {
-      color: rgba(255, 255, 255, 0.6);
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      position: relative;
-      font-size: 0.95rem;
-      letter-spacing: 0.5px;
-      padding: 0.5rem 0;
-    }
-
-    .nav-links a:hover {
-      color: #fff;
-    }
-
-    .nav-links a.active {
-      color: #fff;
-    }
-
-    .nav-links a.active::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: var(--neon-green);
-      box-shadow: 0 0 10px var(--neon-green);
-      border-radius: 2px;
-    }
-  `]
+  templateUrl: './header.component.html',
+  styleUrl: './header.component.css'
 })
 export class HeaderComponent {
 

@@ -1,0 +1,99 @@
+<div class="daily-bytes-container fade-in">
+
+    <!-- Header with Settings Toggle -->
+    <div class="header-row">
+        <div>
+            <h1>Daily New Bytes</h1>
+            @if (dailyByte()) {
+            <span class="date">{{ dailyByte()?.date | date:'fullDate' }}</span>
+            }
+        </div>
+        <button class="settings-btn" (click)="toggleSettings()" title="Configure Agent">
+            ⚙️
+        </button>
+    </div>
+
+    <!-- Settings / Key Input Section (Hidden by default) -->
+    @if (showSettings()) {
+    <div class="settings-panel">
+        <div class="agent-card">
+            <div class="icon">🤖</div>
+            <h2>Configure News Agent</h2>
+            <p>Enter your Guardian API Key to enable live AI news cursing.</p>
+            <div class="input-group">
+                <input [ngModel]="apiKeyInput()" (ngModelChange)="apiKeyInput.set($event)"
+                    placeholder="Paste API Key here..." />
+                <button (click)="saveKey()" [disabled]="!apiKeyInput()">Save Key</button>
+            </div>
+            <p class="hint">Currently running: <strong>{{ hasKey() ? 'Live Mode' : 'Demo Mode' }}</strong></p>
+            <p class="hint small"><a href="https://open-platform.theguardian.com/access/" target="_blank">Get a free
+                    key</a></p>
+        </div>
+    </div>
+    }
+
+    <!-- State: Loading / Agent Working -->
+    @if (isLoading()) {
+    <div class="loading-section">
+        <div class="terminal">
+            <div class="terminal-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <span class="title">Agent Status</span>
+            </div>
+            <div class="terminal-body">
+                @for (log of agentLogs(); track log.time) {
+                <div class="log-line">
+                    <span class="timestamp">[{{log.time}}]</span> {{log.message}}
+                </div>
+                }
+                <div class="cursor">_</div>
+            </div>
+        </div>
+    </div>
+    }
+
+    <!-- State: Content Display -->
+    @if (dailyByte() && !isLoading()) {
+    <div class="content-section">
+
+        <div class="news-grid">
+            <!-- Main Story Card -->
+            @if (dailyByte()?.mainStory; as main) {
+            <a [href]="main.url" target="_blank" class="news-card main">
+                <div class="card-image"
+                    [style.backgroundImage]="'url(' + (main.thumbnail || 'assets/placeholder-news.jpg') + ')'">
+                    <div class="category-tag">{{ main.category }}</div>
+                </div>
+                <div class="card-content">
+                    <h2>{{ main.title }}</h2>
+                    <p [innerHTML]="main.summary"></p>
+                </div>
+            </a>
+            }
+
+            <!-- Sports Card -->
+            @if (dailyByte()?.sportsHighlight; as sports) {
+            <a [href]="sports.url" target="_blank" class="news-card sport">
+                <div class="card-image"
+                    [style.backgroundImage]="'url(' + (sports.thumbnail || 'assets/placeholder-sport.jpg') + ')'">
+                    <div class="category-tag sport-tag">{{ sports.category }}</div>
+                </div>
+                <div class="card-content">
+                    <h2>{{ sports.title }}</h2>
+                    <p [innerHTML]="sports.summary"></p>
+                </div>
+            </a>
+            }
+        </div>
+
+        @if (!hasKey()) {
+        <div class="demo-banner">
+            Running in Demo Mode. Add an API key to get live daily updates.
+        </div>
+        }
+    </div>
+    }
+
+</div>
